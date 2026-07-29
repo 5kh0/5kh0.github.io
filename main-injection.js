@@ -2,8 +2,11 @@
     'use strict';
 
     const originalTitle = document.title;
-    const originalFavicon = document.querySelector("link[rel*='icon']")?.href || "/favicon.ico"; 
-    const originalType = document.querySelector("link[rel*='icon']")?.getAttribute("type") || "image/png";
+    const faviconLinkQuery = 'link[rel="icon"], link[rel="shortcut icon"], link[rel~="icon"]';
+    const getFaviconLink = () => document.querySelector(faviconLinkQuery) || document.querySelector("link[rel*='icon']");
+    const originalFaviconLink = getFaviconLink();
+    const originalFavicon = originalFaviconLink?.href || "/favicon.ico"; 
+    const originalType = originalFaviconLink?.getAttribute("type") || "image/png";
     const blank = " ";
     const png = "image/png";
 
@@ -31,10 +34,11 @@
     }
 
     document.addEventListener("visibilitychange", () => {
-        let icon = document.querySelector("link[rel*='icon']");
+        let icon = getFaviconLink();
         if (!icon) {
             icon = document.createElement('link');
-            icon.rel = 'shortcut icon';
+            icon.rel = 'icon';
+            icon.id = 'favicon';
             document.head.appendChild(icon);
         }
 
@@ -103,7 +107,7 @@
     
     const style = document.createElement('style');
     style.innerHTML = `
-        #custom-macro-menu {
+       #custom-macro-menu {
             position: absolute;
             background: #18181b;
             border: 1px solid #27272a;
@@ -114,7 +118,7 @@
             font-size: 13px;
             font-weight: 500;
             color: #e4e4e7;
-            z-index: 99999999;
+            z-index: 2147483646 !important; 
             display: none;
             min-width: 190px;
             user-select: none;
@@ -146,7 +150,7 @@
             padding: 2px 6px;
             font-size: 12px;
             color: #a1a1aa;
-            z-index: 100000000;
+            z-index: 2147483646 !important;
         }
         .close-btn:hover {
             color: #ffffff;
